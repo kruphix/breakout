@@ -1,6 +1,6 @@
-function Ball(x, y) {
-	this.x = x;
-	this.y = y;
+function Ball(startingX, startingY) {
+	this.x = startingX;
+	this.y = startingY;
 	this.x_speed = 0;
 	this.y_speed = 3;
 	this.radius = 5;
@@ -16,10 +16,10 @@ Ball.prototype.render = function() {
 Ball.prototype.update = function(paddle1, paddle2) {
 	this.x += this.x_speed;
 	this.y += this.y_speed;
-	var top_x = this.x - 5;
-	var top_y = this.y - 5;
-	var bottom_x = this.x + 5;
-	var bottom_y = this.y + 5;
+	var left = this.x - 5;
+	var top = this.y - 5;
+	var right = this.x + 5;
+	var bottom = this.y + 5;
 
 	if(this.x - 5 < 0) { // hitting the left wall
 		this.x = 5;
@@ -47,15 +47,15 @@ Ball.prototype.update = function(paddle1, paddle2) {
 		document.getElementById('computer-score').innerHTML = computer.score;
 	}
 
-	if(top_y > 300) {
-		if(top_y < (paddle1.y + paddle1.height) && bottom_y > paddle1.y && top_x < (paddle1.x + paddle1.width) && bottom_x > paddle1.x) {
+	if(top > 300) {
+		if(top < (paddle1.y + paddle1.height) && bottom > paddle1.y && left < (paddle1.x + paddle1.width) && right > paddle1.x) {
 			// hit the player's paddle
 			this.y_speed = -(this.y_speed + 0.1);
 			this.x_speed += (paddle1.x_speed / 2);
 			this.y += this.y_speed;
 		}
 	} else {
-		if(top_y < (paddle2.y + paddle2.height) && bottom_y > paddle2.y && top_x < (paddle2.x + paddle2.width) && bottom_x > paddle2.x) {
+		if(top < (paddle2.y + paddle2.height) && bottom > paddle2.y && left < (paddle2.x + paddle2.width) && right > paddle2.x) {
 			// hit the computer's paddle
 			this.y_speed = -(this.y_speed - 0.1);
 			this.x_speed += (paddle2.x_speed / 2);

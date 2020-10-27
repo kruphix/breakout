@@ -1,12 +1,14 @@
 const canvas = document.getElementById('pong');
-const width = canvas.width;
-const height = canvas.height;
+const canvasWidth = canvas.width;
+const canvasHeight = canvas.height;
 const context = canvas.getContext('2d');
+const canvasBackground = "#FF00FF";
 
 var player = new Player();
 var computer = new Computer();
 var ball = new Ball(200, 300);
 var keysDown = {};
+let isPaused = false;
 
 window.onload = function() {
 	document.getElementById('player-score').innerHTML = 0;
@@ -16,6 +18,7 @@ window.onload = function() {
 
 window.addEventListener("keydown", function(event) {
 	keysDown[event.keyCode] = true;
+	checkPaused();
 });
 
 window.addEventListener("keyup", function(event) {
@@ -29,8 +32,10 @@ var animate = window.requestAnimationFrame ||
 };
 
 var step = function() {
-	update();
-	render();
+	if (!isPaused) {
+		update();
+		render();
+	}
 	animate(step);
 };
 
@@ -41,9 +46,25 @@ var update = function() {
 };
 
 var render = function() {
-	context.fillStyle = "#FF00FF";
-	context.fillRect(0, 0, width, height);
+	context.fillStyle = canvasBackground;
+	context.fillRect(0, 0, canvasWidth, canvasHeight);
 	player.render();
 	computer.render();
 	ball.render();
 };
+
+var checkPaused = function() {
+	if (keysDown[80]) {
+		isPaused = !isPaused;
+	}
+
+	if (isPaused) {
+		context.font = "30px Comic Sans MS";
+		context.fillStyle = "green";
+		context.textAlign = "center";
+		context.fillText("Paused", canvas.width/2, canvas.height/2);
+	}
+	else {
+		context.fillText("");
+	}
+}
