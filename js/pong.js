@@ -25,6 +25,13 @@ window.addEventListener("keyup", function(event) {
 	delete keysDown[event.keyCode];
 });
 
+document.getElementById("reset").addEventListener("click", function() {
+	player.score = 0;
+	computer.score = 0;
+	document.getElementById('player-score').innerHTML = player.score;
+	document.getElementById('computer-score').innerHTML = computer.score;
+});
+
 var animate = window.requestAnimationFrame ||
 	window.webkitRequestAnimationFrame ||
 	window.mozRequestAnimationFrame ||
