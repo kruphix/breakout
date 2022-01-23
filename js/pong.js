@@ -5,14 +5,17 @@ const context = canvas.getContext('2d');
 const canvasBackground = "#FF00FF";
 
 var player = new Player();
-var computer = new Computer();
 var ball = new Ball(200, 300);
 var keysDown = {};
 let isPaused = false;
 
+var tile1 = new Tile(150, 250, 50, 150);
+var tile2 = new Tile(150, 250, 250, 350);
+var tile3 = new Tile(350, 450, 50, 150);
+var tile4 = new Tile(350, 450, 250, 350);
+
 window.onload = function() {
-	document.getElementById('player-score').innerHTML = 0;
-	document.getElementById('computer-score').innerHTML = 0;
+	document.getElementById('player-score').innerHTML = 5;
 	animate(step);
 };
 
@@ -26,16 +29,14 @@ window.addEventListener("keyup", function(event) {
 });
 
 document.getElementById("reset").addEventListener("click", function() {
-	player.score = 0;
-	computer.score = 0;
+	player.score = 5;
 	document.getElementById('player-score').innerHTML = player.score;
-	document.getElementById('computer-score').innerHTML = computer.score;
 });
 
 var animate = window.requestAnimationFrame ||
 	window.webkitRequestAnimationFrame ||
 	window.mozRequestAnimationFrame ||
-	function(callback) { window.setTimeout(callback, 1000/60) 
+	function(callback) { window.setTimeout(callback, 1000/60)
 };
 
 var step = function() {
@@ -48,20 +49,27 @@ var step = function() {
 
 var update = function() {
 	player.update();
-	computer.update(ball);
-	ball.update(player.paddle, computer.paddle);
+	ball.updatePaddle(player.paddle);
+	ball.updateTile(tile1);
+	ball.updateTile(tile2);
+	ball.updateTile(tile3);
+	ball.updateTile(tile4);
+
 };
 
 var render = function() {
 	context.fillStyle = canvasBackground;
 	context.fillRect(0, 0, canvasWidth, canvasHeight);
 	player.render();
-	computer.render();
 	ball.render();
+	tile1.render();
+	tile2.render();
+	tile3.render();
+	tile4.render();
 };
 
 var checkPaused = function() {
-	if (keysDown[80]) {
+	if (keysDown[80]) { // P button
 		isPaused = !isPaused;
 	}
 
@@ -72,6 +80,6 @@ var checkPaused = function() {
 		context.fillText("Paused", canvas.width/2, canvas.height/2);
 	}
 	else {
-		context.fillText("");
+		context.fillText("", 0, 0);
 	}
 }

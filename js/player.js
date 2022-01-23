@@ -1,6 +1,6 @@
 function Player() {
 	this.paddle = new Paddle(175, 580, 50, 10);
-	this.score = 0;
+	this.score = 5;
 }
 
 Player.prototype.render = function() {
@@ -25,7 +25,7 @@ Player.prototype.update = function() {
 		this.paddle.move(4, 0);
 	}
 	else {
-		//this.paddle.move(0, 0);
+		this.paddle.move(0, 0);
 	}
 	document.getElementById('paddle-x-speed').innerHTML = this.paddle.x_speed;
 };
