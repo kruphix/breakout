@@ -50,10 +50,18 @@ var step = function() {
 var update = function() {
 	player.update();
 	ball.updatePaddle(player.paddle);
-	ball.updateTile(tile1);
-	ball.updateTile(tile2);
-	ball.updateTile(tile3);
-	ball.updateTile(tile4);
+	if (tile1.show) {
+		ball.updateTile(tile1);
+	}
+	if (tile2.show) {
+		ball.updateTile(tile2);
+	}
+	if (tile3.show) {
+		ball.updateTile(tile3);
+	}
+	if (tile4.show) {
+		ball.updateTile(tile4);
+	}
 
 };
 
@@ -62,10 +70,18 @@ var render = function() {
 	context.fillRect(0, 0, canvasWidth, canvasHeight);
 	player.render();
 	ball.render();
-	tile1.render();
-	tile2.render();
-	tile3.render();
-	tile4.render();
+	if (tile1.show) {
+		tile1.render();
+	}
+	if (tile2.show) {
+		tile2.render();
+	}
+	if (tile3.show) {
+		tile3.render();
+	}
+	if (tile4.show) {
+		tile4.render();
+	}
 };
 
 var checkPaused = function() {

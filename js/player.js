@@ -1,5 +1,5 @@
 function Player() {
-	this.paddle = new Paddle(175, 580, 50, 10);
+	this.paddle = new Paddle(150, 580, 100, 10);
 	this.score = 5;
 }
 

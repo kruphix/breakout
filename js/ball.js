@@ -38,6 +38,10 @@ Ball.prototype.updatePaddle = function(paddle1) {
 		this.y_speed = 2;
 		this.x = 200;
 		this.y = 300;
+		tile1.show = true;
+		tile2.show = true;
+		tile3.show = true;
+		tile4.show = true;
 		document.getElementById('player-score').innerHTML = player.score;
 	}
 
@@ -64,10 +68,14 @@ Ball.prototype.updateTile = function(tile) {
 	if (left < tile.right_x && right > tile.left_x && this.y < tile.bottom_y && this.y > tile.top_y) { // collision on tile left or right
 		this.x_speed = -this.x_speed;
 		//this.x += this.x_speed;
+		tile.clear();
+		tile.show = false;
 	}
 	else if (top < tile.bottom_y && bottom > tile.top_y && this.x < tile.right_x && this.x > tile.left_x) { // collision on tile top or bottom
 		this.y_speed = -this.y_speed;
 		//this.y += this.y_speed;
+		tile.clear();
+		tile.show = false;
 	}
 
 	document.getElementById('x-speed').innerHTML = this.x_speed;
