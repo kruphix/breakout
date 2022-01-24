@@ -8,20 +8,19 @@ var player = new Player();
 var ball = new Ball(200, 300);
 var keysDown = {};
 let isPaused = false;
-
-var tile1 = new Tile(150, 250, 50, 150);
-var tile2 = new Tile(150, 250, 250, 350);
-var tile3 = new Tile(350, 450, 50, 150);
-var tile4 = new Tile(350, 450, 250, 350);
+var tiles = [];
+var win = false;
 
 window.onload = function() {
 	document.getElementById('player-score').innerHTML = 5;
+	setupTiles();
 	animate(step);
 };
 
 window.addEventListener("keydown", function(event) {
 	keysDown[event.keyCode] = true;
 	checkPaused();
+	checkStartNew();
 });
 
 window.addEventListener("keyup", function(event) {
@@ -39,8 +38,16 @@ var animate = window.requestAnimationFrame ||
 	function(callback) { window.setTimeout(callback, 1000/60)
 };
 
+var setupTiles = function() {
+	for (let i = 100; i <= 240; i = i + 20) {
+		for (let j = 20; j <= 290; j = j + 90) {
+			tiles.push(new Tile(i, i + 10, j, j + 80));
+		}
+	}
+}
+
 var step = function() {
-	if (!isPaused) {
+	if (!isPaused && !win) {
 		update();
 		render();
 	}
@@ -49,20 +56,7 @@ var step = function() {
 
 var update = function() {
 	player.update();
-	ball.updatePaddle(player.paddle);
-	if (tile1.show) {
-		ball.updateTile(tile1);
-	}
-	if (tile2.show) {
-		ball.updateTile(tile2);
-	}
-	if (tile3.show) {
-		ball.updateTile(tile3);
-	}
-	if (tile4.show) {
-		ball.updateTile(tile4);
-	}
-
+	ball.update(player.paddle);
 };
 
 var render = function() {
@@ -70,18 +64,12 @@ var render = function() {
 	context.fillRect(0, 0, canvasWidth, canvasHeight);
 	player.render();
 	ball.render();
-	if (tile1.show) {
-		tile1.render();
-	}
-	if (tile2.show) {
-		tile2.render();
-	}
-	if (tile3.show) {
-		tile3.render();
-	}
-	if (tile4.show) {
-		tile4.render();
-	}
+	tiles.forEach(function(tile) {
+		if (tile.show) {
+			ball.updateTile(tile);
+			tile.render();
+		}
+	})
 };
 
 var checkPaused = function() {
@@ -98,4 +86,18 @@ var checkPaused = function() {
 	else {
 		context.fillText("", 0, 0);
 	}
+}
+
+var checkStartNew = function() {
+	if (win && keysDown[78]) { // N button
+		win = false;
+		// start new game
+	}
+}
+
+var winGame = function() {
+	context.font = "30px Comic Sans MS";
+	context.fillStyle = "yellow";
+	context.textAlign = "center";
+	context.fillText("WINNER", canvas.width/2, canvas.height/2);
 }

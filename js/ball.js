@@ -13,7 +13,7 @@ Ball.prototype.render = function() {
 	context.fill();
 };
 
-Ball.prototype.updatePaddle = function(paddle1) {
+Ball.prototype.update = function(paddle1) {
 	this.x += this.x_speed;
 	this.y += this.y_speed;
 	var left = this.x - 5;
@@ -38,18 +38,21 @@ Ball.prototype.updatePaddle = function(paddle1) {
 		this.y_speed = 2;
 		this.x = 200;
 		this.y = 300;
-		tile1.show = true;
-		tile2.show = true;
-		tile3.show = true;
-		tile4.show = true;
+		tiles.forEach(function(tile) {
+			tile.show = true;
+		})
 		document.getElementById('player-score').innerHTML = player.score;
+
+		if (player.score <= 0) {
+			// restart game
+		}
 	}
 
 	if(top > 500) {
 		if(top < (paddle1.y + paddle1.height) && bottom > paddle1.y && left < (paddle1.x + paddle1.width) && right > paddle1.x) {
 			// hit the player's paddle
 			this.y_speed = -(this.y_speed);
-			this.x_speed += (paddle1.x_speed / 2);
+			this.x_speed += (paddle1.x_speed / 4);
 			this.y += this.y_speed;
 		}
 	}
@@ -67,17 +70,32 @@ Ball.prototype.updateTile = function(tile) {
 
 	if (left < tile.right_x && right > tile.left_x && this.y < tile.bottom_y && this.y > tile.top_y) { // collision on tile left or right
 		this.x_speed = -this.x_speed;
-		//this.x += this.x_speed;
-		tile.clear();
 		tile.show = false;
+
+		win = true;
+		for (let t of tiles) {
+			if (t.show) { // if any tiles remaining, not won yet
+				win = false;
+				break;
+			}
+		}
+		if (win) {
+			winGame();
+		}
 	}
 	else if (top < tile.bottom_y && bottom > tile.top_y && this.x < tile.right_x && this.x > tile.left_x) { // collision on tile top or bottom
 		this.y_speed = -this.y_speed;
-		//this.y += this.y_speed;
-		tile.clear();
 		tile.show = false;
-	}
 
-	document.getElementById('x-speed').innerHTML = this.x_speed;
-	document.getElementById('y-speed').innerHTML = this.y_speed;
+		win = true;
+		for (let t of tiles) {
+			if (t.show) { // if any tiles remaining, not won yet
+				win = false;
+				break;
+			}
+		}
+		if (win) {
+			winGame();
+		}
+	}
 };
